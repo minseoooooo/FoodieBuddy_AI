@@ -1,0 +1,77 @@
+FoodieBuddy: Here is a list of the dishes you mentioned, with a short description of each:
+
+- **김치찌개 (Kimchi Jjigae)**: A stew made with kimchi, often including tofu, spring onions, and other vegetables, as well as meat.
+- **된장찌개 (Doenjang Jjigae)**: A stew made with soybean paste, vegetables such as potatoes, aubergine, and courgette, and sometimes tofu.
+- **순두부찌개 (Sundubu Jjigae)**: A spicy stew made with soft tofu, often including shellfish, and seasoned with chilli powder, soy sauce, or salt.
+- **비빔밥 (Bibimbap)**: A rice dish with a variety of vegetables, often including gochujang (chilli paste) and sesame oil. It is often served in a hot stone pot and can be customised with meat or eggs.
+- **떡볶이 (Tteokbokki)**: A popular dish made with small, long, white, cylinder-shaped rice cakes, called tteokmyeon or tteokbokki-tteok. It is often seasoned with a spicy gochujang-based sauce and commonly includes fish cakes, boiled eggs, and spring onions.
+
+Please let me know if you would like me to explain any of these dishes in more detail, or provide suggestions for customisations based on your dietary restrictions. 
+
+You: I want to order sundubu jjigae
+
+ FoodieBuddy: Sure! Sundubu jjigae is a delicious and comforting choice. Before we proceed with the ordering, I would like to inform you that sundubu jjigae usually includes tofu. Since you mentioned that you do not eat tofu, I will ask the waiter if it can be excluded from the dish. 
+
+Also, I will ask the waiter some questions about the ingredients to ensure that the dish suits your dietary restrictions. If you would like to order sundubu jjigae, please answer my questions so that I can guide you through the ordering process.
+
+First, let's start the conversation with the waiter. Please enter your answer to the following sentence:
+
+"사장님, 순두부찌개 하나 주문하려고 하는데요, 그 전에 질문이 있어요.
+ [sʰadzaŋɲim sundubu tɕʰigae hana tsumunʰaryɡo haneɲeo kɯ dzʌne tsilmuɲi is̕ʌyo]
+I'm going to order Sundubu jjigae, but before that, I have a few questions." 
+
+You: The waiter said yes.
+
+ FoodieBuddy: Great! Now, I will ask a few questions to ensure that the sundubu jjigae can be adjusted to your dietary restrictions. 
+
+First, sundubu jjigae usually includes tofu. Since you mentioned that you do not eat tofu, I will ask the waiter if it can be excluded from the dish. Please enter your answer to the following sentence:
+
+"순두부찌개에 두부 넣지 말라고 할 수 있나요?
+ [sundubu tɕʰigaeʌ tʊbu nʌʈɕi malago hal su innayo]?
+ Can you ask them to not put tofu in the sundubu jjigae?" 
+
+You: No
+
+ FoodieBuddy: 그럼 조금 더 고민해볼게요.
+
+[kɯɾʌm t͡ɕoɡɯm tʰʌ kominha bʌlˈk̕ejo]
+
+Then I'll think about it a little more.
+
+Let's go back to the list of dishes, and I will explain each of them again briefly:
+
+- 김치찌개 (Kimchi Jjigae): a hearty stew with kimchi, often including tofu, spring onions, and other vegetables, as well as meat.
+- 된장찌개 (Doenjang Jjigae): a flavorful stew made with soybean paste, vegetables like potatoes and eggplant, and sometimes tofu.
+- 비빔밥 (Bibimbap): a colorful rice dish with assorted vegetables, often served with gochujang (chili paste) and sesame oil, and customizable with meat or eggs.
+- 떡볶이 (Tteokbokki): a popular and spicy dish made with rice cakes, fish cakes, boiled eggs, and spring onions, seasoned with a gochujang-based sauce.
+
+Please choose another dish you would like to order, and I will guide you through the ordering process again. 
+
+You: I want to eat bibimbap
+
+ FoodieBuddy: Great! Bibimbap is a wonderful choice. Before we proceed with the ordering, I will ask the waiter some questions to ensure that the dish suits your dietary restrictions. 
+
+Bibimbap typically includes mushrooms, which you mentioned you should avoid. Please enter your answer to the following sentence:
+
+"비빔밥에 버섯 들어가면, 뺄 수 있나요?
+ [pibimp̕abe pʌsʰʌt̚ tɯrʌgamyʌn p̕ɛls̕u innayo]?
+ If there are mushrooms in bibimbap, can you leave out mushrooms, please?" 
+
+You: Yes
+
+ FoodieBuddy: That's great! Now, we can proceed with the ordering. Please use the following sentence to initiate the conversation with the waiter and let them know about your request: 
+
+"사장님, 비빔밥 하나 주문할 건데요, 그 전에 버섯은 빼주세요.
+ [sʰadzaŋɲim pibimp̕ap hana tsumunhal kʌndejo kɯ dzʌne pʰʌsʰʌt̚ ʌn pʰɛʣʌso]
+I'm going to order Bibimbap, but before that, please leave out the mushrooms." 
+
+Now, please answer the following question: 
+
+"그렇게 주문할게요. 감사합니다.
+ [kɯrʌkʰe tsumunhal keyo kamsʰahamɲida]
+I would like to order it like that. Thank you." 
+
+This is the final step of our conversation. I hope you enjoy your Bibimbap! 
+
+You: quit
+Chat ended.
