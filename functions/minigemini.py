@@ -8,7 +8,7 @@ import base64
 from gradio_client import Client
 from PIL import Image
 
-client = Client("wcy1122/Mini-Gemini")
+client = Client("http://103.170.5.190:7860/")
 
 result = client.predict(
 		api_name="/clear_history"
@@ -16,27 +16,23 @@ result = client.predict(
 print(result)
 
 result = client.predict(
-		imagebox=None,
-		textbox="Hello!!",
-		image_process_mode="Default",
-		gen_image="No",
-		temperature=0.2,
-		top_p=0.7,
-		max_output_tokens=512,
-		api_name="/generate_1"
+		"Hi",	# str  in 'parameter_3' Textbox component
+		None,	# filepath  in 'parameter_11' Image component
+		"Default",	# Literal['Crop', 'Resize', 'Pad', 'Default']  in 'Preprocess for non-square image' Radio component
+		api_name="/add_text_1"
 )
 print(result)
 
 result = client.predict(
-		imagebox=None,
-		textbox="What is 김치찌개? Explain its ingredients and generate an image of the korean dish.",
-		image_process_mode="Default",
-		gen_image="Yes",
-		temperature=0.2,
-		top_p=0.7,
-		max_output_tokens=512,
-		api_name="/generate_1"
+		"MGM-34B-HD",	# Literal['MGM-34B-HD']  in 'parameter_10' Dropdown component
+		0,	# float (numeric value between 0.0 and 1.0) in 'Temperature' Slider component
+		0,	# float (numeric value between 0.0 and 1.0) in 'Top P' Slider component
+		100,	# float (numeric value between 0 and 1024) in 'Max output tokens' Slider component
+		"No",	# Literal['Yes', 'No']  in 'Generate Image' Radio component
+		"No",	# Literal['Yes', 'No']  in 'Use OCR' Radio component
+		api_name="/http_bot_1"
 )
+print(result)
 
 pattern = r'src="data:image/jpeg;base64,([^"]+)"'
 
