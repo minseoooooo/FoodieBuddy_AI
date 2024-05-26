@@ -1,4 +1,3 @@
-#기본 로직은 완성, cohere은 그럭저럭 잘 되는 중, 중간에 minigemini, ingredient에서 오류 있어서 일단 제외해둠
 !pip install cohere
 !pip install gradio_client
 
