@@ -1,77 +1,88 @@
-FoodieBuddy: Here is a list of the dishes you mentioned, with a short description of each:
+FoodieBuddy: Here is a list of the dishes with a short explanation of each:
 
-- **김치찌개 (Kimchi Jjigae)**: A stew made with kimchi, often including tofu, spring onions, and other vegetables, as well as meat.
-- **된장찌개 (Doenjang Jjigae)**: A stew made with soybean paste, vegetables such as potatoes, aubergine, and courgette, and sometimes tofu.
-- **순두부찌개 (Sundubu Jjigae)**: A spicy stew made with soft tofu, often including shellfish, and seasoned with chilli powder, soy sauce, or salt.
-- **비빔밥 (Bibimbap)**: A rice dish with a variety of vegetables, often including gochujang (chilli paste) and sesame oil. It is often served in a hot stone pot and can be customised with meat or eggs.
-- **떡볶이 (Tteokbokki)**: A popular dish made with small, long, white, cylinder-shaped rice cakes, called tteokmyeon or tteokbokki-tteok. It is often seasoned with a spicy gochujang-based sauce and commonly includes fish cakes, boiled eggs, and spring onions.
+Budae Jjigae - This is a Korean stew that is loaded with Kimchi, spam, sausages, ramen noodles, and more. It is a popular hot pot dish that is cheap and easy to make.
+Doenjang Jjigae - This is a staple Korean stew made with fermented soybean paste. It is usually made with fatty pork, but you can also use beef or seafood. It is often served with rice and kimchi.
+Dakbokkeumtang - This is a spicy braised chicken dish that is also called Dakdoritang. It is made with chicken wings and thighs, potatoes, carrots, and onions. It is a hearty and savoury dish.
+Gochujang Jjigae - This is a spicy Korean stew that is made with gochujang (a fermented Korean chilli paste). It is usually served with rice and kimchi.
+Kimchi Jjigae - This is a classic Korean stew made with kimchi, meat (usually pork belly), and tofu. It is a robust and spicy dish.
+Which dish would you like to order?
 
-Please let me know if you would like me to explain any of these dishes in more detail, or provide suggestions for customisations based on your dietary restrictions. 
 
-You: I want to order sundubu jjigae
+You: I would like to order Budae Jjigae!
 
- FoodieBuddy: Sure! Sundubu jjigae is a delicious and comforting choice. Before we proceed with the ordering, I would like to inform you that sundubu jjigae usually includes tofu. Since you mentioned that you do not eat tofu, I will ask the waiter if it can be excluded from the dish. 
 
-Also, I will ask the waiter some questions about the ingredients to ensure that the dish suits your dietary restrictions. If you would like to order sundubu jjigae, please answer my questions so that I can guide you through the ordering process.
+FoodieBuddy:
 
-First, let's start the conversation with the waiter. Please enter your answer to the following sentence:
+Budae Jjigae, or Army Stew, is a hearty and comforting dish that is perfect for sharing with friends and family. It originated after the Korean War when food was scarce, and Koreans supplemented their diet with surplus food from US military bases. This includes ingredients like spam, sausages, canned beans, and American cheese, which are combined with traditional Korean flavours such as kimchi, tofu, and gochugaru (Korean chilli flakes).
 
-"사장님, 순두부찌개 하나 주문하려고 하는데요, 그 전에 질문이 있어요.
- [sʰadzaŋɲim sundubu tɕʰigae hana tsumunʰaryɡo haneɲeo kɯ dzʌne tsilmuɲi is̕ʌyo]
-I'm going to order Sundubu jjigae, but before that, I have a few questions." 
+The dish is highly customisable, and while it typically includes meat, it can be adapted to be vegetarian or vegan. It is also very easy to make, as it involves mostly cutting and slicing the ingredients, and the preparation time is short.
 
-You: The waiter said yes.
+Budae Jjigae is a great choice for those who want a flavourful, comforting, and affordable meal. Would you like to order this dish?
 
- FoodieBuddy: Great! Now, I will ask a few questions to ensure that the sundubu jjigae can be adjusted to your dietary restrictions. 
 
-First, sundubu jjigae usually includes tofu. Since you mentioned that you do not eat tofu, I will ask the waiter if it can be excluded from the dish. Please enter your answer to the following sentence:
+You: Yes! 
 
-"순두부찌개에 두부 넣지 말라고 할 수 있나요?
- [sundubu tɕʰigaeʌ tʊbu nʌʈɕi malago hal su innayo]?
- Can you ask them to not put tofu in the sundubu jjigae?" 
 
-You: No
+FoodieBuddy: Great! Now, let's start creating your order in Korean.
 
- FoodieBuddy: 그럼 조금 더 고민해볼게요.
+First, here's a sentence to start the conversation with the waiter:
 
-[kɯɾʌm t͡ɕoɡɯm tʰʌ kominha bʌlˈk̕ejo]
+"사장님, 부대찌개 하나 주문할 건데요, 그 전에 질문이 있어요.
 
-Then I'll think about it a little more.
+[sʰadzaŋɲim p͈uðɛ t͈ɯdʑigae hana tsumunhal k͈ʌndeyo kɯ k͈ɯnʌ tʌɰen tɕilmuɲi is̕ʌjo]
 
-Let's go back to the list of dishes, and I will explain each of them again briefly:
+I'm going to order Budae Jjigae, but before that, I have a few questions."
 
-- 김치찌개 (Kimchi Jjigae): a hearty stew with kimchi, often including tofu, spring onions, and other vegetables, as well as meat.
-- 된장찌개 (Doenjang Jjigae): a flavorful stew made with soybean paste, vegetables like potatoes and eggplant, and sometimes tofu.
-- 비빔밥 (Bibimbap): a colorful rice dish with assorted vegetables, often served with gochujang (chili paste) and sesame oil, and customizable with meat or eggs.
-- 떡볶이 (Tteokbokki): a popular and spicy dish made with rice cakes, fish cakes, boiled eggs, and spring onions, seasoned with a gochujang-based sauce.
+Now, I will ask about the ingredients you should not eat or should eat in moderation.
 
-Please choose another dish you would like to order, and I will guide you through the ordering process again. 
+Budae Jjigae typically includes tofu, which you must not eat. Here's a question to ask about that:
 
-You: I want to eat bibimbap
+"부대찌개에 두부 넣지 말아 주실 수 있나요?
 
- FoodieBuddy: Great! Bibimbap is a wonderful choice. Before we proceed with the ordering, I will ask the waiter some questions to ensure that the dish suits your dietary restrictions. 
+[p͈uðɛ t͈ɯdʑigaeʌ t͈ɯbu nʌt͈i malla jusil su innayo]?
 
-Bibimbap typically includes mushrooms, which you mentioned you should avoid. Please enter your answer to the following sentence:
+Can you please not put tofu in the Budae Jjigae?"
 
-"비빔밥에 버섯 들어가면, 뺄 수 있나요?
- [pibimp̕abe pʌsʰʌt̚ tɯrʌgamyʌn p̕ɛls̕u innayo]?
- If there are mushrooms in bibimbap, can you leave out mushrooms, please?" 
+Is the answer to this question 'Yes'?
+
+
+You: Yes 
+
+
+FoodieBuddy: Great! Now, let's move on to the next ingredient, mushrooms, which you should avoid. Here's the next question:
+
+"부대찌개에 버섯 들어가나요?
+
+[p͈uðɛ t͈ɯdʑigaeʌ pʌsʰʌt̚ t͈ɯrʌgʌnajo]?
+
+Does Budae Jjigae contain mushrooms?"
+
+Is the answer to this question 'Yes'?
+
+
+You: Yes 
+
+
+FoodieBuddy: Great! Now, ask if they can leave out the mushrooms:
+
+"버섯은 넣지 않으면 안 되나요?
+
+[pʌsʰʌt̚ʌn nʌt͈i ans͈ʌmʌn an t͈ʌʌnajo]?
+
+Is it possible to not put in mushrooms?"
+
+Is the answer to this question 'Yes'?
+
 
 You: Yes
 
- FoodieBuddy: That's great! Now, we can proceed with the ordering. Please use the following sentence to initiate the conversation with the waiter and let them know about your request: 
 
-"사장님, 비빔밥 하나 주문할 건데요, 그 전에 버섯은 빼주세요.
- [sʰadzaŋɲim pibimp̕ap hana tsumunhal kʌndejo kɯ dzʌne pʰʌsʰʌt̚ ʌn pʰɛʣʌso]
-I'm going to order Bibimbap, but before that, please leave out the mushrooms." 
+FoodieBuddy: Now, you can finish the ordering with the following sentence:
 
-Now, please answer the following question: 
+"그렇게 빼고 주문할게요. 감사합니다.
 
-"그렇게 주문할게요. 감사합니다.
- [kɯrʌkʰe tsumunhal keyo kamsʰahamɲida]
-I would like to order it like that. Thank you." 
+[kɯrʌkʰe pʰɛgo tsumunhal k͈eyo kamsʰaɦamnida]
 
-This is the final step of our conversation. I hope you enjoy your Bibimbap! 
+Please take that out of my order. Thank you."
 
-You: quit
-Chat ended.
+This concludes the ordering process. I hope you enjoy your Budae Jjigae!
