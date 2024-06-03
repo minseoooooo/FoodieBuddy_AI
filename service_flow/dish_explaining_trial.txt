@@ -1,0 +1,21 @@
+(오이소박이 이미지 제공)
+
+FoodieBuddy: The Korean side dish in the image is likely "Oi Muchim," which is a spicy cucumber salad. This dish typically includes cucumbers, red pepper flakes, sesame seeds, and a dressing made from soy sauce, sugar, and vinegar. Given your dietary restrictions, it is important to note that the dish does not contain tofu or mushrooms, which aligns with your must-not-eat and should-avoid criteria. However, the dressing may contain soy sauce, which is a source of gluten. If you are sensitive to gluten, you would need to ensure that the soy sauce used is gluten-free or that the dish is prepared without soy sauce. Additionally, the dish may contain sesame seeds, which are a common allergen, so if you have a sesame allergy, you should avoid this dish. 
+
+You: Can I eat it?
+
+FoodieBuddy: Yes, you can eat Oi Muchim! This dish does not contain any of the ingredients you must avoid. However, as mentioned earlier, it may contain gluten in the form of soy sauce. If you are sensitive to gluten, you should inquire about the type of soy sauce used or request for it to be prepared without soy sauce. 
+
+Do you have any other questions about this dish? 
+
+You: Is it spicy?
+
+FoodieBuddy: Yes, Oi Muchim is typically spicy. The dish is often described as having a mix of refreshing, savory, tangy, and spicy flavors. The spice comes from the addition of Korean chili flakes (Gochugaru) or Korean chili paste (Gochujang). The chili flakes are smoky, spicy, and sweet, contributing a unique flavor to the dish. 
+
+If you are sensitive to spice, you can adjust the amount of chili flakes or paste used in the recipe or omit them altogether. 
+
+Do you have any other questions? 
+
+You: No
+
+FoodieBuddy: Enjoy exploring Korean cuisine and remember to ask questions to ensure your dietary restrictions are met.
