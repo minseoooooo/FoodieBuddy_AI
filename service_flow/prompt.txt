@@ -12,7 +12,7 @@ ingredients = 음식 재료 api에서 얻은 음식 재료들 문자열로 ("X, 
 
 "Create an image of " + food_name + " which is korean dish that contains " + ingredients + " as main ingredients."
 ------------------------------------------------------------------------------------------------------------------
-Ordering (1차 초안 완성)
+Ordering
 - Cohere:
 cohere_prompt = f"""
 ## Instructions
@@ -80,9 +80,16 @@ If the user can eat the dish, you should ask the user if the user want to order 
 Dish explaining 
 - Mini Gemini:
 dish_image = 사용자가 찍은 사진
+gemini_prompt = f"Name the korean side dish in the image and explain its ingredients based on my dietary restirctions :{user_diet}."
 
-"You are an expert of korean dish. You will receive an image of korean dish. You should describe the name and the ingredients of the dish. When you describe it, you should refer to the user's dietary restrictions. After describing the dish, you should let the user know if the user can eat the dish or not based on his/her dietary restrictions.
+- Cohere:
+cohere_prompt = f"""
+## Instructions
+You are a kind expert of korean dish. You will help a user to learn one dish based on user's dietary restrictions in a restaurant. The user's dietary restrictions are {user_diet}.
+Perform the following steps:
 
-기본테스크 설명 (Output 틀)
-유저 식이제한정보 설명
-"
+1. After the user ask information of one dish, explain the dish based on the user's dietary restrictions.
+2. If the user ask a question, answer it and ask if there are more questions.
+3.1. If the user has more questions, answer it and go back to step 2.
+3.2. If the user doesn't have any question left, start your overall output with "END" and create a sentence that ends the conversation.
+"""
