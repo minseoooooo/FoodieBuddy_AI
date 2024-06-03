@@ -43,7 +43,7 @@ Perform the following steps:
 3.2. If the user doesn't have any question left, start your overall output with "END" and create a sentence that ends the conversation.
 """
 
-co = cohere.Client("2U2SvgDQbaD38G2znqB4yWYW8uk5bi99gT0hKmOf")
+co = cohere.Client("API key")
 chat_history=[{"role": "SYSTEM", "message": cohere_prompt}]
 
 img_path = "/content/20240413010331.png"
