@@ -72,12 +72,15 @@ def scrape_website(url):
   recipe_list = directions_section.find_all_next('ol')  # 모든 <ol> 찾기
   recipe = ""
 
-  for i in range(len(recipe_list)):
-    if i == len(recipe_list)-1: break
-    list_items = recipe_list[i].find_all('li')  # <ol> 안의 모든 <li> 추출
-    recipe += f"\n#{i+1}"
-    for i, item in enumerate(list_items, 1):
-       recipe += f"\n{i}. {item.get_text(strip=True)}"
+  if directions_section is not None:
+      recipe_list = directions_section.find_all_next('ol')  # 모든 <ol> 찾기
+
+      for i in range(len(recipe_list)):
+        if i == len(recipe_list)-1: break
+        list_items = recipe_list[i].find_all('li')  # <ol> 안의 모든 <li> 추출
+        recipe += f"\n#{i+1}"
+        for i, item in enumerate(list_items, 1):
+           recipe += f"\n{i}. {item.get_text(strip=True)}"
 
   return recipe
 
@@ -95,7 +98,7 @@ def search_recipe(dish_name):
 def dishimg_gen(dish_name):
 
   dish_name = dish_name.replace("[","").replace("]","")
-  sd_prompt = f"Create an image of {dish_name} which is a korean dish"
+  sd_prompt = f"A realistic image of {dish_name}"
 
   sd_prompt += search_ingredients(dish_name)
   sd_prompt += search_recipe(dish_name)
@@ -131,7 +134,7 @@ def recommendation(str_user_diet):
   The user's dietary restrictions are {str_user_diet}.
 
   You should start the conversation and ask which type of dish the user want to try.
-  Based on the user's answer, suggest a dish what the user can eat for the meal. You must mention the dish name in this form: "[the dish name(English)]". Then explain the dish in detail.
+  Based on the user's answer, suggest a dish what the user can eat for the meal. You must start your output with "[the dish name in English]". For example, "[Kimchi Stew]". Then explain the dish in detail.
 
   If the user don't like the suggestion, ask the reason and suggest another dish.
   If the user decide what to eat, end the conversation.
@@ -149,12 +152,13 @@ def recommendation(str_user_diet):
   while True:
     response = chain.invoke({"messages":chat_history.messages})
     chat_history.add_ai_message(response.content)
-    print(f"FoodieBuddy:{response.content}")
-
-    if re.search(r'\[([\D]+)\]', response.content):
+    
+    if response.content.startswith("["):
       dish_name = re.search(r'\[([\D]+)\]', response.content).group(1)
-
       dishimg_gen(dish_name)
+      response.content = response.content[len(dish_name)+2:].lstrip()
+
+    print(f"FoodieBuddy:{response.content}")
 
     user_message = input("You: ")
     if user_message.lower() == 'x':
