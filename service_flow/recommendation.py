@@ -139,7 +139,7 @@ def recommendation(str_user_diet):
   Follow the steps below:
   1. Start the conversation and ask which type of dish the user wants to try.
   2. Based on the user's answer and user's dietary restrictions, suggest a dish what the user can eat for the meal. 
-     In this step, YOU MUST START YOUR OUTPUT WITH "[THE DISH NAME IN ENGLISH]". For example, "[Kimchi Stew]"". Then explain the dish in detail.
+     In this step, YOU MUST START YOUR OUTPUT WITH "[THE DISH NAME IN ENGLISH]". Then explain the dish in detail. For example, "[Kimchi Stew] Kimchi Stew(Kimchi Jjigae) is ...(continue)...."
   3. If the user don't like the suggestion, go back to step 2.
   4. If the user decide what to eat, end the conversation.  
   """
