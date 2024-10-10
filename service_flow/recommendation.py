@@ -61,7 +61,7 @@ def search_ingredients(dish_name):
       return "Main ingredients are "+ingredients
 
 def google_search(query):
-  search_url = f"https://serpapi.com/search.json?q={query}&api_key=d123f6ebd427f365cdab180754399edcd536d81fa81a13454ae4c17f4d700f04"
+  search_url = f"https://serpapi.com/search.json?q={query}&api_key=apikey"
   response = requests.get(search_url)
   return response.json()
 
