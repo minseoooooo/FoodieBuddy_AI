@@ -118,7 +118,7 @@ def dishimg_gen(dish_name):
 
   if response.status_code == 200:
     filename = dish_name.lower().replace(" ", "")
-    with open(f"./{filename}_test.png", 'wb') as file:
+    with open(f"./images/{filename}_test.png", 'wb') as file:
       file.write(response.content)
 
   else:
@@ -131,13 +131,17 @@ def recommendation(str_user_diet):
   recommend_prompt = f"""
   ## Instructions
   You are a kind expert in Korean cuisine. You will chat with a user in English to recommend a dish to the user based on the user's dietary restrictions and additional information.
-  The user's dietary restrictions are {str_user_diet}.
-
-  You should start the conversation and ask which type of dish the user want to try.
-  Based on the user's answer, suggest a dish what the user can eat for the meal. You must start your output with "[the dish name in English]". For example, "[Kimchi Stew]". Then explain the dish in detail.
-
-  If the user don't like the suggestion, ask the reason and suggest another dish.
-  If the user decide what to eat, end the conversation.
+  The user's dietary restrictions are {str_user_diet}. 
+  
+  Everytime you mention the dish name, YOU MUST USE THIS FORM: The dish name in English(The pronunciation of its korean name). 
+  For example, "Kimchi Stew(Kimchi Jjigae)", "Grilled Pork Belly(Samgyeopsal)".
+  
+  Follow the steps below:
+  1. Start the conversation and ask which type of dish the user wants to try.
+  2. Based on the user's answer and user's dietary restrictions, suggest a dish what the user can eat for the meal. 
+     In this step, YOU MUST START YOUR OUTPUT WITH "[THE DISH NAME IN ENGLISH]". For example, "[Kimchi Stew]"". Then explain the dish in detail.
+  3. If the user don't like the suggestion, go back to step 2.
+  4. If the user decide what to eat, end the conversation.  
   """
 
   prompt = ChatPromptTemplate.from_messages(
