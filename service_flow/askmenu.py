@@ -14,10 +14,6 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 os.environ["OPENAI_API_KEY"] = "APIkey"
 
-def encode_image(image_path):
-  with open(image_path, "rb") as image_file:
-    return base64.b64encode(image_file.read()).decode('utf-8')
-
 def search_ingredients(dish_name):
 
   model = ChatOpenAI(model="gpt-4o")
@@ -42,7 +38,7 @@ def search_ingredients(dish_name):
 
   result_msg_element = root.find('.//result_Msg')
 
-  if result_msg_element is not None and result_msg_element.text == '요청 데이터 없음':
+  if result_msg_element is None or result_msg_element.text == '요청 데이터 없음':
       return ""
   else:
       item = root.find('body/items').findall('item')[0]
@@ -64,10 +60,10 @@ def search_ingredients(dish_name):
 
           count_item+=1
 
-      return "Main ingredients are "+ingredients
+      return "\nMain ingredients are "+ingredients
 
 def google_search(query):
-  search_url = f"https://serpapi.com/search.json?q={query}&api_key=d123f6ebd427f365cdab180754399edcd536d81fa81a13454ae4c17f4d700f04"
+  search_url = f"https://serpapi.com/search.json?q={query}&api_key=apikey"
   response = requests.get(search_url)
   return response.json()
 
@@ -75,15 +71,17 @@ def scrape_website(url):
   response = requests.get(url)
   soup = BeautifulSoup(response.content, 'html.parser')
   directions_section = soup.find('h2', string='Directions')  # 'Directions' 섹션 찾기
-  recipe_list = directions_section.find_all_next('ol')  # 모든 <ol> 찾기
   recipe = ""
 
-  for i in range(len(recipe_list)):
-    if i == len(recipe_list)-1: break
-    list_items = recipe_list[i].find_all('li')  # <ol> 안의 모든 <li> 추출
-    recipe += f"\n#{i+1}"
-    for i, item in enumerate(list_items, 1):
-       recipe += f"\n{i}. {item.get_text(strip=True)}"
+  if directions_section is not None:
+      recipe_list = directions_section.find_all_next('ol')  # 모든 <ol> 찾기
+
+      for i in range(len(recipe_list)):
+          if i == len(recipe_list) - 1: break
+          list_items = recipe_list[i].find_all('li')  # <ol> 안의 모든 <li> 추출
+          recipe += f"\n#{i + 1}"
+          for i, item in enumerate(list_items, 1):
+              recipe += f"\n{i}. {item.get_text(strip=True)}"
 
   return recipe
 
@@ -96,15 +94,16 @@ def search_recipe(dish_name):
 
   recipe = scrape_website(url)
 
-  return "Generate the image based on the recipe below:" + recipe
+  return "\nGenerate the image based on the recipe below:" + recipe
 
 def dishimg_gen(dish_name):
 
   dish_name = dish_name.replace("[","").replace("]","")
-  sd_prompt = f"Create an image of {dish_name} which is a korean dish"
+  sd_prompt = f"A realistic image of {dish_name}"
 
-  sd_prompt += search_ingredients(dish_name)
-  sd_prompt += search_recipe(dish_name)
+  #sd_prompt += search_ingredients(dish_name)
+  #sd_prompt += search_recipe(dish_name)
+
 
   response = requests.post(
     f"https://api.stability.ai/v2beta/stable-image/generate/ultra",
@@ -121,21 +120,16 @@ def dishimg_gen(dish_name):
 
   if response.status_code == 200:
     filename = dish_name.lower().replace(" ", "")
-    with open(f"./{filename}_test.png", 'wb') as file:
+    with open(f"./images/{filename}_test.png", 'wb') as file:
       file.write(response.content)
 
   else:
 	  raise Exception(str(response.json()))
 
 def gen_get_img_response_prompt(param_dict):
-  system_message = "You are a kind korean cuisine expert that explains images and answers questions provided by the user. Your answer should be a list of dish names."
-
+  system_message = "You are a kind korean cuisine expert. Create a list of dish names in the image."
+	
   human_message = [
-      {
-          "type":"text",
-          "text": f"{param_dict['question']}",
-
-      },
       {
           "type": "text",
           "text": f"{param_dict['diet']}",
@@ -156,8 +150,7 @@ def get_img_response(img_path, str_user_diet):
   model = ChatOpenAI(model="gpt-4o")
   base64_img = encode_image(img_path) #서버에 있는 이미지 쓸때는 이거 그냥 빼셈
   chain = gen_get_img_response_prompt | model | StrOutputParser()
-  response = chain.invoke({"question":"What are the list of the names of each dish of this image?",
-                           "diet": str_user_diet,
+  response = chain.invoke({"diet": str_user_diet,
                          "image_url":f"data:image/jpeg;base64,{base64_img}"
                          }
                        )
@@ -174,14 +167,34 @@ def askmenu(menu_img, str_user_diet):
   print(chat_history.messages)
 
   askmenu_prompt = f"""
-  You are a kind expertin Korean cuisine. You will chat with a user in English to help them choose a dish at a restaurant based on the user's dietary restrictions.
+  You are a kind expert in Korean cuisine. You will chat with a user in English to help them choose a dish at a restaurant based on the user's dietary restrictions.
   The user's dietary restrictions are {str_user_diet}.
+  
+  Everytime you mention the dish name, YOU MUST USE THIS FORM: The dish name in English(The pronunciation of its korean name). 
+  For example, "**Kimchi Stew(Kimchi Jjigae)**", "**Grilled Pork Belly(Samgyeopsal)**".
+  
+  Everytime you ask a question use linebreaks before the question.
+  
   If the user asks any questions during the conversation, kindly answer them and continue the dialogue.
-  Using the instructions below, perform the following steps:
-
+  
+  Follow the steps below:
   1. You will be given a list of dish names. Start the conversation by briefly explaining each dish in one sentence.
-  2. Ask the user which dish they want to order and wait for their response.
-  3. Based on the user's choice, you must start your output with "[the dish name(English)]" and explain the dish in detail, considering the user's dietary restrictions.
+  2. Ask the user which dish they want to order.
+  3. Based on the user's choice, explain the chosen dish.
+     YOU MUST SAY ONLY IN THE FORM BELOW INCLUDING LINEBREAKS.:
+     "[The pronunciation of the korean dish name(The dish name in English)] **The dish name in English(The pronunciation of its korean name)**
+     The basic information of the dish in one sentence.
+     
+     The main ingredients of the dish in one sentence. The information related to the user's dietary restrictions in one sentence.
+     
+     Several hashtags related to the dish."
+     
+     For example, "[Kimchi Jjigae(Kimchi Stew)] **Kimchi Stew(Kimchi Jjigae)**
+     It is a classic Korean dish that's perfect for those who enjoy a spicy and warming meal.
+     
+     It's made with fermented kimchi, tofu, and various vegetables, simmered together to create a rich and flavorful broth. It's traditionally made with pork, but it can easily be adapted to fit your dietary restrictions by leaving out the meat.
+     
+     #spicy #polular #warm"
   4. Ask if the user would like to order the dish.
   5. If the user wants to order the dish, continue to step 6. If not, return to step 2 and provide the list and brief explanations again.
   6. Ask if the user has any questions about the dish.
