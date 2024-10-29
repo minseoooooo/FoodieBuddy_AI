@@ -10,21 +10,27 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 os.environ["OPENAI_API_KEY"] = "API key"
 
 def get_img_response_prompt(param_dict):
-  system_message = """You are a kind expert in Korean cuisine. You will explain a user in English to help the user understand a dish at a korean restaurant.
+  system_message = """You are a kind expert in Korean cuisine. You will explain a korean side dish image to a user in English.
   Your explanation must be based on the user's dietary restrictions. Explain it in 3 or 4 sentences.
-  YOU MUST SAY IT SIMPLY BUT KINDLY.
   
-  First Sentence: Explain the name and the category of the dish.
-  Second Sentence: Explain the ingredients based on the user's dietary restrictions.
-  Third Sentence: Let the user know if the user can eat it of not.
-  (If there are any cautions, Fourth Sentence: Let the user know which ingredients the user should check.)
+  Everytime you mention the dish name, YOU MUST USE THIS FORM: The dish name in English(The pronunciation of its korean name). 
+  For example, "**Kimchi Stew(Kimchi Jjigae)**", "**Grilled Pork Belly(Samgyeopsal)**".
+  
+  YOU MUST SAY ONLY IN THE FORM BELOW INCLUDING LINEBREAKS.:
+  "The basic information of the dish in one sentence.
+  
+  The main ingredients of the dish in one sentence. The information related to the user's dietary restrictions in one sentence.
+  Whether it is suitable for the user or not.
+  
+  Several hashtags related to the dish."
+  For example, "This dish is Braised Burdock Root(Ueongjorim), a type of side dish made with burdock root.
+  
+  It typically includes burdock root, soy sauce, sugar, sesame oil, and sometimes garlic. Since you avoid gluten, you should check if the soy sauce used in this preparation is gluten-free. 
+  If it contains regular soy sauce, it might not be suitable for you.
+  
+  #healthy #side_dish #vegetable"
   """
   human_message = [
-      {
-          "type":"text",
-          "text": f"{param_dict['question']}",
-
-      },
       {
           "type": "text",
           "text": f"{param_dict['diet']}",
@@ -49,8 +55,7 @@ def get_img_response(img_path,str_user_diet):
   model = ChatOpenAI(model = "gpt-4o")
 
   chain = get_img_response_prompt | model | StrOutputParser()
-  response = chain.invoke({"question":"What's the name of this korean side dish?",
-                           "diet": str_user_diet,
+  response = chain.invoke({"diet": str_user_diet,
                          "image_url":f"data:image/jpeg;base64,{base64_img}"
                          }
                        )
@@ -58,7 +63,6 @@ def get_img_response(img_path,str_user_diet):
 
 def askdish(dish_img, str_user_diet):
 
-  # 채팅 사용 모델 - 파인 튜닝하면 여기에 쓸 모델 id가 바뀜
   model = ChatOpenAI(model = "gpt-4o")
   chat_history = ChatMessageHistory()
 
@@ -70,11 +74,16 @@ def askdish(dish_img, str_user_diet):
   # askdish용 프롬프트
   askdish_prompt = f"""
   ## Instructions
-  You are a kind expert in Korean cuisine. You will chat with a user in English to help them understand a dish at a restaurant based on the user's dietary restrictions.
+  You are a kind expert in Korean cuisine. You will chat with a user in English to explain a korean side dish to the user based on the user's dietary restrictions.
+  The user is a foreigner visiting a Korean restaurant in Korea.
   The user's dietary restrictions are {str_user_diet}. 
+  
+  Everytime you mention the dish name, YOU MUST USE THIS FORM: The dish name in English(The pronunciation of its korean name). 
+  For example, "**Kimchi Stew(Kimchi Jjigae)**", "**Grilled Pork Belly(Samgyeopsal)**".
 
-  First, explain the dish from the image.
-  Next, check if the user have any question. If user ask any questions about the dish, explain it kindly.
+  Follow the steps below:
+  1. Explain the dish from the image.
+  2. Check if the user have any question. If user ask any questions about the dish, explain it kindly.
   """
 
   prompt = ChatPromptTemplate.from_messages(
@@ -118,7 +127,7 @@ for category in user_diet:
     str_user_diet += i + ","
 
 #물어볼 밑반찬 사진
-#사진을 또보내고싶으면 이 전체 플로우를 다시 시작하는 방향으로...?!
+#사진을 또보내고싶으면 이 전체 플로우를 다시 시작
 dish_img = "img_path"
 
 #함수 실행
