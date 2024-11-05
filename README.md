@@ -1,10 +1,10 @@
 # FoodieBuddy_AI
 
 ### functions:
-- ocr, minigemini, cohere basic setting & examples
-- ingredients api basic setting & examples
+- gpt 4o
+- fine tuned stable diffusion with LoRA
 
 ### service_flow:
-- menu_recommendation
-- ordering
-- dish_explaining
+- recommendation
+- askdish
+- askmenu
