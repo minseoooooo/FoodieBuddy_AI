@@ -4,8 +4,6 @@ import base64
 import requests
 import xml.etree.ElementTree as ET
 
-from bs4 import BeautifulSoup
-
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -19,7 +17,7 @@ def search_ingredients(dish_name):
   model = ChatOpenAI(model="gpt-4o")
 
   chat_prompt = ChatPromptTemplate.from_messages([
-    ("system", "Translate a korean dish name in korean without any explanation. Your answer MUST be a one korean word. Examples - Q:Kimchi jjigae A:김치찌개, Q:Tteokbokki A:떡볶이"),
+    ("system", "Translate a korean dish name in korean without any explanation. Your answer MUST be a one korean word. Examples - Q:Kimchi Jjigae (Kimchi Stew) A:김치찌개, Q:Samgyeopsal (Grilled Pork Belly) A:삼겹살"),
     ("user",  "Q:{dish_name} A:"),
   ])
 
@@ -39,71 +37,29 @@ def search_ingredients(dish_name):
   result_msg_element = root.find('.//result_Msg')
 
   if result_msg_element is None or result_msg_element.text == '요청 데이터 없음':
-      return ""
+      return "No information"
   else:
       item = root.find('body/items').findall('item')[0]
       food_List = item.find('food_List').findall('food')
 
       ingredients = ""
-      count_item = 0
 
       for food in food_List:
           fd_Eng_Nm = food.find('fd_Eng_Nm').text
           ingredient = fd_Eng_Nm.split(',')[0]
 
 
-          if count_item == 0:
+          if ingredients == "":
             ingredients = ingredient
           else :
             ingredients = ingredients +  ", " + ingredient
-            if count_item == 4: break
 
-          count_item+=1
-
-      return "\nMain ingredients are "+ingredients
-
-def google_search(query):
-  search_url = f"https://serpapi.com/search.json?q={query}&api_key=apikey"
-  response = requests.get(search_url)
-  return response.json()
-
-def scrape_website(url):
-  response = requests.get(url)
-  soup = BeautifulSoup(response.content, 'html.parser')
-  directions_section = soup.find('h2', string='Directions')  # 'Directions' 섹션 찾기
-  recipe = ""
-
-  if directions_section is not None:
-      recipe_list = directions_section.find_all_next('ol')  # 모든 <ol> 찾기
-
-      for i in range(len(recipe_list)):
-          if i == len(recipe_list) - 1: break
-          list_items = recipe_list[i].find_all('li')  # <ol> 안의 모든 <li> 추출
-          recipe += f"\n#{i + 1}"
-          for i, item in enumerate(list_items, 1):
-              recipe += f"\n{i}. {item.get_text(strip=True)}"
-
-  return recipe
-
-def search_recipe(dish_name):
-  search_results = google_search(f"How to cook {dish_name}")
-  url = next((result['link'] for result in search_results['organic_results'] if result['link'].startswith('https://www.maangchi.com')), None)
-
-  if url is None:
-      return ""
-
-  recipe = scrape_website(url)
-
-  return "\nGenerate the image based on the recipe below:" + recipe
+      return f"Ingredients of {dish_name} are "+ingredients
 
 def dishimg_gen(dish_name):
 
   dish_name = dish_name.replace("[","").replace("]","")
   sd_prompt = f"A realistic image of {dish_name}"
-
-  #sd_prompt += search_ingredients(dish_name)
-  #sd_prompt += search_recipe(dish_name)
-
 
   response = requests.post(
     f"https://api.stability.ai/v2beta/stable-image/generate/ultra",
@@ -120,7 +76,7 @@ def dishimg_gen(dish_name):
 
   if response.status_code == 200:
     filename = dish_name.lower().replace(" ", "")
-    with open(f"./images/{filename}_test.png", 'wb') as file:
+    with open(f"./{filename}_test.png", 'wb') as file:
       file.write(response.content)
 
   else:
@@ -128,7 +84,7 @@ def dishimg_gen(dish_name):
 
 def gen_get_img_response_prompt(param_dict):
   system_message = "You are a kind korean cuisine expert. Create a list of dish names in the image."
-	
+
   human_message = [
       {
           "type": "text",
@@ -148,7 +104,8 @@ def gen_get_img_response_prompt(param_dict):
 def get_img_response(img_path, str_user_diet):
 
   model = ChatOpenAI(model="gpt-4o")
-  base64_img = encode_image(img_path) #서버에 있는 이미지 쓸때는 이거 그냥 빼셈
+  with open(img_path, "rb") as image_file:
+    base64_img = base64.b64encode(image_file.read()).decode('utf-8')
   chain = gen_get_img_response_prompt | model | StrOutputParser()
   response = chain.invoke({"diet": str_user_diet,
                          "image_url":f"data:image/jpeg;base64,{base64_img}"
@@ -164,7 +121,6 @@ def askmenu(menu_img, str_user_diet):
   menu_explain = get_img_response(menu_img, str_user_diet)
   system_message = SystemMessage(content=menu_explain)
   chat_history.add_message(system_message)
-  print(chat_history.messages)
 
   askmenu_prompt = f"""
   You are a kind expert in Korean cuisine. You will chat with a user in English to help them choose a dish at a restaurant based on the user's dietary restrictions.
@@ -179,17 +135,20 @@ def askmenu(menu_img, str_user_diet):
   
   Follow the steps below:
   1. You will be given a list of dish names. Start the conversation by briefly explaining each dish in one sentence.
-  2. Ask the user which dish they want to order.
-  3. Based on the user's choice, explain the chosen dish.
+  2. Ask the user which dish they want to order or want to know.
+  3. Reform the user's choice as below:
+     "[The pronunciation of the korean dish name (The dish name in English)]"
+     For example, "[Kimchi Jjigae (Kimchi Stew)]"
+  4. After you get the system's message about the ingredients, explain the chosen dish. 
      YOU MUST SAY ONLY IN THE FORM BELOW INCLUDING LINEBREAKS.:
-     "[The pronunciation of the korean dish name(The dish name in English)] **The dish name in English(The pronunciation of its korean name)**
+     "**The dish name in English(The pronunciation of its korean name)**
      The basic information of the dish in one sentence.
      
      The main ingredients of the dish in one sentence. The information related to the user's dietary restrictions in one sentence.
      
      Several hashtags related to the dish."
      
-     For example, "[Kimchi Jjigae(Kimchi Stew)] **Kimchi Stew(Kimchi Jjigae)**
+     For example, "**Kimchi Stew(Kimchi Jjigae)**
      It is a classic Korean dish that's perfect for those who enjoy a spicy and warming meal.
      
      It's made with fermented kimchi, tofu, and various vegetables, simmered together to create a rich and flavorful broth. It's traditionally made with pork, but it can easily be adapted to fit your dietary restrictions by leaving out the meat.
@@ -213,12 +172,21 @@ def askmenu(menu_img, str_user_diet):
   while True:
     response = chain.invoke({"messages":chat_history.messages})
     chat_history.add_ai_message(response.content)
-    print(f"FoodieBuddy:{response.content}")
-
+    
     if response.content.startswith("["):
       dish_name = re.search(r'\[([\D]+)\]', response.content).group(1)
+
+      ingredients = search_ingredients(dish_name)
+      ingredients_message = SystemMessage(content=ingredients)
+      chat_history.add_message(ingredients_message)
+
+      response = chain.invoke({"messages": chat_history.messages})
+      chat_history.add_ai_message(response.content)
+
       dishimg_gen(dish_name)
 
+    print(f"FoodieBuddy:{response.content}")
+	  
     user_message = input("You: ")
     if user_message.lower() == 'x':
       print("Chat ended.")
