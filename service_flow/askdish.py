@@ -9,6 +9,9 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
+from sshtunnel import SSHTunnelForwarder
+import pymysql
+
 os.environ["OPENAI_API_KEY"] = "API key"
 
 def search_ingredients(dish_name):
@@ -155,23 +158,68 @@ def askdish(dish_img, str_user_diet):
     chat_history.add_user_message(user_message)
   return chat_history.messages
 
-#유저 샘플 데이터
-user_sample = [
-    {"name": "John",
-     "diet":{"meat": ["red meat", "other meat"],
-              "dairy": ["milk"],
-              "seafood" : ["shrimp"],
-              "gluten(wheat)" : []
-            }},
-             ]
 
-#유저 샘플 데이터를 prompt에 넣어주기 위해 변환
-user_diet = user_sample[0]["diet"]
-str_user_diet = ""
-for category in user_diet:
-  str_user_diet += category + ":"
-  for i in user_diet[category]:
-    str_user_diet += i + ","
+
+# EC2 연결 설정
+ssh_host = ''
+ssh_user = 'ubuntu'
+ssh_key_file = 'foodiebuddy-ec2-key.pem'
+
+# RDS 데이터베이스 설정
+rds_host = ''
+rds_port = 3306
+
+server = SSHTunnelForwarder(
+    (ssh_host, 22),
+    ssh_username=ssh_user,
+    ssh_pkey=ssh_key_file,
+    remote_bind_address=(rds_host, rds_port),
+    local_bind_address=('127.0.0.1', 3307)  # 로컬 머신에서 3307 포트를 통해 연결
+)
+
+try:
+    server.start()
+    #print(f"SSH 터널이 열렸습니다. 로컬 포트 {server.local_bind_port}을 통해 RDS에 연결할 수 있습니다.")
+except Exception as e:
+    #print(f"SSH 터널을 여는 동안 오류가 발생했습니다: {e}")
+    import traceback
+    traceback.print_exc()
+
+connection = pymysql.connect(
+    host='127.0.0.1',  # 로컬 호스트에서 접근
+    user='admin',
+    password='',
+    db='foodiebuddy', # foodiebuddy: 스키마 이름
+    port=server.local_bind_port  # SSH 터널의 포트 (server.local_bind_port 사용)
+)
+
+#유저 한명 식이제한 불러오기
+cursor = connection.cursor()
+cursor.execute("SHOW COLUMNS FROM user")
+diets_list = cursor.fetchall()
+
+cursor.execute("SELECT * FROM user Where user_id = 1")
+result = cursor.fetchall()
+user_diets = list(result[0])
+user_info = {}
+
+for i in range(len(diets_list)):
+    if diets_list[i][0] not in ('user_id', 'email', 'password', 'username'):
+        user_info[diets_list[i][0]] = user_diets[i]
+
+str_user_diet = f"Religion: {user_info['religion']}, Vegetarian: {user_info['vegetarian']}. Details: "
+for k, v in user_info.items():
+    if k == 'vegetarian' or k == 'religion':
+        continue
+    if v is None or v == b'\x00':
+        continue
+
+    if v == b'\x01':
+        str_user_diet += k + ', '
+    else:
+        str_user_diet += k + ':' + v + ', '
+
+str_user_diet = str_user_diet[:-2]+'.'
 
 #물어볼 밑반찬 사진
 #사진을 또보내고싶으면 이 전체 플로우를 다시 시작하는 방향으로...?!
