@@ -47,7 +47,7 @@ connection = pymysql.connect(
 )
 
 #유저 한명에 대해 collaborative filtering 계산
-user_id = 1  # 또는 다른 id로 설정
+user_id = 1
 
 query = f"""
 SELECT user_id
@@ -120,21 +120,21 @@ cursor.execute(query)
 
 user_ids_from_db = cursor.fetchall()
 user_ids = tuple(user_id[0] for user_id in user_ids_from_db)
-#여기까지 일치하는 or dr 더 가진 사람들 찾기
-      
-#이 아래는 menu에서 조회해서 cosine similarity계산 -> collaborative filtering 적용하는 내용, 아직 실행 안시켜봄
-#menu 테이블 업데이트 되면 테스트 할 예정
-"""
-cursor.execute("SELECT user_id, menu_id, star FROM menu WHERE user_id IN %s", (user_ids,))
+cursor.execute("SELECT user_id FROM user WHERE user_id IN %s", (user_ids,))
+
+#print(cursor.fetchall()) 겹치는 유저 확인용
+
+
+cursor.execute("SELECT user_id, pronunciation, star FROM menu WHERE user_id IN %s", (user_ids,))
 menu_ratings = cursor.fetchall()
 
 import pandas as pd
 
 # 가져온 데이터를 데이터프레임으로 변환
-df = pd.DataFrame(menu_ratings, columns=['user_id', 'menu_id', 'star'])
+df = pd.DataFrame(menu_ratings, columns=['user_id', 'pronunciation', 'star'])
 
 # 유저-메뉴 매트릭스 생성 (user_id를 인덱스, menu_id를 컬럼으로 하고 star를 값으로)
-user_menu_matrix = df.pivot_table(index='user_id', columns='menu_id', values='star')
+user_menu_matrix = df.pivot_table(index='user_id', columns='pronunciation', values='star')
 
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -144,7 +144,7 @@ user_similarity_df = pd.DataFrame(user_similarity, index=user_menu_matrix.index,
 
 # 특정 유저(user_id=1)의 유사한 유저를 찾고 추천할 메뉴 결정
 target_user_id = 1
-similar_users = user_similarity_df[target_user_id].sort_values(ascending=False).index[1:]  # 자신 제외
+similar_users = user_similarity_df[target_user_id].sort_values(ascending=False).index[1:4]  # 자신 제외 3명
 
 # 유사한 유저들이 별점 준 메뉴 중, target_user_id가 평가하지 않은 메뉴 추출
 target_user_ratings = user_menu_matrix.loc[target_user_id]
@@ -154,5 +154,13 @@ similar_user_ratings = user_menu_matrix.loc[similar_users]
 recommendations = (similar_user_ratings.mean(axis=0)
                    .drop(target_user_ratings.dropna().index)
                    .sort_values(ascending=False))
-"""
-#print("The list of menus that similar users liked, but the user didn't try before is", recommendations.head())
+
+filtered_recommendations = recommendations[recommendations >= 4]
+
+recommended_menus = ""
+for menu, rating in filtered_recommendations.items():
+    recommended_menus += f" {menu}({rating}/5.0),"
+
+recommended_menus = recommended_menus[:-1]+"."
+
+print(f"The list of menus that similar users liked, but the user didn't try before is{recommended_menus}")
