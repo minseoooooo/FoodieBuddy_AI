@@ -11,6 +11,8 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 from sshtunnel import SSHTunnelForwarder
 import pymysql
+import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
 
 os.environ["OPENAI_API_KEY"] = "API key"
 
@@ -303,21 +305,14 @@ user_ids_from_db = cursor.fetchall()
 user_ids = tuple(user_id[0] for user_id in user_ids_from_db)
 cursor.execute("SELECT user_id FROM user WHERE user_id IN %s", (user_ids,))
 
-#print(cursor.fetchall()) 겹치는 유저 확인용
-
+#print(cursor.fetchall()) 이건 겹치는 유저 확인용
 
 cursor.execute("SELECT user_id, pronunciation, star FROM menu WHERE user_id IN %s", (user_ids,))
 menu_ratings = cursor.fetchall()
 
-import pandas as pd
 
-# 가져온 데이터를 데이터프레임으로 변환
 df = pd.DataFrame(menu_ratings, columns=['user_id', 'pronunciation', 'star'])
-
-# 유저-메뉴 매트릭스 생성 (user_id를 인덱스, menu_id를 컬럼으로 하고 star를 값으로)
 user_menu_matrix = df.pivot_table(index='user_id', columns='pronunciation', values='star')
-
-from sklearn.metrics.pairwise import cosine_similarity
 
 # 결측치를 0으로 채우고 유사도 계산
 user_similarity = cosine_similarity(user_menu_matrix.fillna(0))
@@ -331,11 +326,9 @@ similar_users = user_similarity_df[target_user_id].sort_values(ascending=False).
 target_user_ratings = user_menu_matrix.loc[target_user_id]
 similar_user_ratings = user_menu_matrix.loc[similar_users]
 
-# 유사한 유저들이 높은 별점을 준 메뉴 중 target_user_id가 평가하지 않은 메뉴 추천
 recommendations = (similar_user_ratings.mean(axis=0)
                    .drop(target_user_ratings.dropna().index)
                    .sort_values(ascending=False))
-
 filtered_recommendations = recommendations[recommendations >= 4]
 
 recommended_menus = ""
