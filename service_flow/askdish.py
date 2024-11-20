@@ -161,12 +161,12 @@ def askdish(dish_img, str_user_diet):
 
 
 # EC2 연결 설정
-ssh_host = '54.180.105.172'
+ssh_host = ''
 ssh_user = 'ubuntu'
 ssh_key_file = 'foodiebuddy-ec2-key.pem'
 
 # RDS 데이터베이스 설정
-rds_host = 'foodiebuddy-rds.clo8m062s7ci.ap-northeast-2.rds.amazonaws.com'
+rds_host = ''
 rds_port = 3306
 
 server = SSHTunnelForwarder(
@@ -188,7 +188,7 @@ except Exception as e:
 connection = pymysql.connect(
     host='127.0.0.1',  # 로컬 호스트에서 접근
     user='admin',
-    password='powerfulunicorn11!',
+    password='',
     db='foodiebuddy', # foodiebuddy: 스키마 이름
     port=server.local_bind_port  # SSH 터널의 포트 (server.local_bind_port 사용)
 )
